@@ -8,12 +8,11 @@ insights_API_URL="https://access.redhat.com/r/insights/v3"
 ####################
 # Parse command line
 ####################
-if len(sys.argv) != 4:
-    print("Usage: ", sys.argv[0], " {account_num} {RHN_username} {RHN_password}")
+if (len(sys.argv) != 3) and (len(sys.argv) != 4):
+    print("Usage: ", sys.argv[0], " {RHN_username} {RHN_password} [{account_num}]")
     exit()
-account_number=sys.argv[1]
-RHN_USER=sys.argv[2]
-RHN_PASSWORD=sys.argv[3]
+RHN_USER=sys.argv[1]
+RHN_PASSWORD=sys.argv[2]
 
 ##################
 # Build websession
@@ -21,8 +20,9 @@ RHN_PASSWORD=sys.argv[3]
 websession = requests.Session()
 websession.auth = (RHN_USER, RHN_PASSWORD)
 
-#request_parms = { 'account_number': account_number }
-#websession.params = request_parms
+if len(sys.argv) == 4:
+    request_parms = { 'account_number': sys.argv[3] }
+    websession.params = request_parms
 
 #################
 # Collect reports
