@@ -1,7 +1,6 @@
-#!/usr/bin/env python3
-
-#second version of kab plugin to access insights...
+#!/usr/bin/python3
 import requests,sys
+
 insights_API_URL="https://access.redhat.com/r/insights/v3"
 # note: API docs are at https://access.redhat.com/r/insights/docs/
 
