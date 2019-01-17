@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+
+#second version of kab plugin to access insights...
+import requests,sys
+insights_API_URL="https://access.redhat.com/r/insights/v3"
+# note: API docs are at https://access.redhat.com/r/insights/docs/
+
+####################
+# Parse command line
+####################
+if len(sys.argv) != 4:
+    print("Usage: ", sys.argv[0], " {account_num} {RHN_username} {RHN_password}")
+    exit()
+account_number=sys.argv[1]
+RHN_USER=sys.argv[2]
+RHN_PASSWORD=sys.argv[3]
+
+##################
+# Build websession
+##################
+websession = requests.Session()
+websession.auth = (RHN_USER, RHN_PASSWORD)
+
+#request_parms = { 'account_number': account_number }
+#websession.params = request_parms
+
+#################
+# Collect reports
+#################
+report_data = websession.get(insights_API_URL + "/exports/reports").text.split("\n")
+print(*report_data, sep = "\n")
