@@ -1,30 +1,38 @@
-#!/usr/bin/python3
-import requests,sys
+#!/usr/bin/python2
+import requests
+import sys
 
-insights_API_URL="https://access.redhat.com/r/insights/v3"
+insights_API_URL = "https://access.redhat.com/r/insights/v3"
 # note: API docs are at https://access.redhat.com/r/insights/docs/
 
 ####################
 # Parse command line
 ####################
 if (len(sys.argv) != 3) and (len(sys.argv) != 4):
-    print("Usage: ", sys.argv[0], " {RHN_username} {RHN_password} [{account_num}]")
+    print "Usage:", sys.argv[0], "{RHN_username} {RHN_password} [{account_num}]"
     exit()
-RHN_USER=sys.argv[1]
-RHN_PASSWORD=sys.argv[2]
+RHN_USER = sys.argv[1]
+RHN_PASSWORD = sys.argv[2]
 
 ##################
 # Build websession
 ##################
 websession = requests.Session()
 websession.auth = (RHN_USER, RHN_PASSWORD)
+request_parms = { }
 
 if len(sys.argv) == 4:
-    request_parms = { 'account_number': sys.argv[3] }
-    websession.params = request_parms
+    request_parms['account_number'] = sys.argv[3]
 
 #################
 # Collect reports
 #################
-report_data = websession.get(insights_API_URL + "/exports/reports").text.split("\n")
-print(*report_data, sep = "\n")
+try:
+    websession.params = request_parms
+    report_response = websession.get(insights_API_URL + "/exports/reports")
+    if report_response.status_code != requests.codes.ok:
+        report_response.raise_for_status()
+    print(report_response.text)
+except requests.exceptions.RequestException as exception:
+    print exception
+    exit(1)
