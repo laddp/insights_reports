@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 import requests
 import sys
+import yaml
 
 insights_API_URL = "https://access.redhat.com/r/insights/v3"
 # note: API docs are at https://access.redhat.com/r/insights/docs/
@@ -8,21 +9,31 @@ insights_API_URL = "https://access.redhat.com/r/insights/v3"
 ####################
 # Parse command line
 ####################
-if (len(sys.argv) != 3) and (len(sys.argv) != 4):
-    print "Usage:", sys.argv[0], "{RHN_username} {RHN_password} [{account_num}]"
+if (len(sys.argv) != 2) and (len(sys.argv) != 3):
+    print "Usage:", sys.argv[0], "{credential file} [{account_num}]"
     exit()
-RHN_USER = sys.argv[1]
-RHN_PASSWORD = sys.argv[2]
+
+request_parms = { }
+if len(sys.argv) == 3:
+    request_parms['account_number'] = sys.argv[2]
+
+##################
+# Load credentials
+##################
+try:
+    cred_file = open(sys.argv[1])
+    values = yaml.safe_load(cred_file)
+    RHN_USER = values['RHN_USER']
+    RHN_PASSWORD = values['RHN_PASSWORD']
+except Exception as e:
+    print "Error reading credentials:", e
+    exit(1)
 
 ##################
 # Build websession
 ##################
 websession = requests.Session()
 websession.auth = (RHN_USER, RHN_PASSWORD)
-request_parms = { }
-
-if len(sys.argv) == 4:
-    request_parms['account_number'] = sys.argv[3]
 
 #################
 # Collect reports
