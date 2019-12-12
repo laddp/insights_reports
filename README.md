@@ -2,7 +2,7 @@
 Scripting to pull reports from the Red Hat Insights API
 
 -------
-**insights_report.old** - Using Insights API, pull active reports (rule hits)
+**insights_report** - Using Insights API, pull active reports (rule hits)
 
 *Usage:* `insights_report {credential file}`
 
@@ -48,3 +48,4 @@ For example:
 System Name,System ID,Rule,Rule ID,Category,Severity,URL,Article,Reported Time (UTC)
 some_system.example.com,aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaaa,Kernel vulnerable to side-channel attacks in modern microprocessors (CVE-2017-5715/Spectre),CVE_2017_5715_cpu_virt|VIRT_CVE_2017_5715_CPU_3_ONLYKERNEL,Security,Medium,https://access.redhat.com/insights/actions/security/CVE_2017_5715_cpu_virt|VIRT_CVE_2017_5715_CPU_3_ONLYKERNEL?machine=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaaa,https://access.redhat.com/security/vulnerabilities/speculativeexecution,2019-01-23 02:43:45
 ~~~
+
